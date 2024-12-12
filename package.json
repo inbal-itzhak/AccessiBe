@@ -10,5 +10,9 @@
   "devDependencies": {
     "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.2"
+  },
+  "dependencies": {
+    "accessibe": "file:",
+    "dotenv": "^16.4.7"
   }
 }
