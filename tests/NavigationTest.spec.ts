@@ -19,10 +19,15 @@ test.describe("Verify navigation bar url's",()=>{
     const urlTest = DataProvider.validateUrls();
     for(const {element, expectedUrl,description} of urlTest){
         test(`test ${description}`, async() =>{
-            await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
-            await navigationBar.openNavigationBar();
-            const actualUrl = await navigationBar.getPageUrl(element);
-            expect(actualUrl, `url of ${element}`).toBe(expectedUrl);
+            await test.step('login and open navigation bar',async()=>{
+                await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
+                await navigationBar.openNavigationBar();
+            })
+            await test.step(`check url for element ${element}`,async()=>{
+                const actualUrl = await navigationBar.getPageUrl(element);
+                expect(actualUrl, `url of ${element}`).toBe(expectedUrl);
+            })
+            
 
         },
     );

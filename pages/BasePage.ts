@@ -24,4 +24,9 @@ export abstract class BasePage {
             await element.fill(textToFill);
         })
     }
+
+    protected async getCurrentPageUrl(): Promise<string>{
+        const currentUrl = await this.page.url();
+        return currentUrl.trim();
+    }
 }

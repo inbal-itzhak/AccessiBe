@@ -26,9 +26,14 @@ test.describe("Input validation for checkout form",()=>{
     const checkoutFormValidation = DataProvider.checkoutFormValidation();
     for(const {firstName, lastName,zipCode,expectedError,firstNameInputValidation,lastNameInputValidation,zipCodeInputValidation,description} of checkoutFormValidation){
         test(`test checkout form with ${description}`, async() =>{
-            await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
-            await checkoutForm.navigateToCheckoutForm();
-            await checkoutForm.fillInCheckoutForm(firstName as string, lastName as string, zipCode as string);
+            await test.step('login and navigate to checkout form',async()=>{
+                await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
+                await checkoutForm.navigateToCheckoutForm();
+            });
+            await test.step('fill in checkout form', async() =>{
+                await checkoutForm.fillInCheckoutForm(firstName as string, lastName as string, zipCode as string);
+            })
+            
             const isFirstnameValid = await checkoutForm.firstNameInputValidation();
             const isLastnameValid = await checkoutForm.lastNameInputValidation();
             const isZipcodeValid = await checkoutForm.zipCodeInputValidation();
@@ -41,12 +46,17 @@ test.describe("Input validation for checkout form",()=>{
 
     const checkoutFormPositive = DataProvider.checkoutFormPositive();
     for (const{firstName,lastName,zipCode,url,description} of checkoutFormPositive) {
-        test(`test checkout when ${description}`, async()=>{
-            await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
-            await checkoutForm.navigateToCheckoutForm();
-            await checkoutForm.fillInCheckoutForm(firstName as string, lastName as string, zipCode as string)
+        test(`test checkout when ${description}`, async({page})=>{
+            await test.step('login and navigate to checkput', async()=>{
+                await loginPage.loginToApplication(username as string, password as string, baseUrl as string);
+                await checkoutForm.navigateToCheckoutForm();
+            })
+            await test.step('fill in valid data',async()=>{
+                await checkoutForm.fillInCheckoutForm(firstName as string, lastName as string, zipCode as string)
+            })
+            const actualUrl = await page.url();
+            expect(actualUrl).toBe(url);
             
-
         })
     }
 

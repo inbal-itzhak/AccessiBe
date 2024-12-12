@@ -19,7 +19,9 @@ test.describe("Negative Login Scenarios", () => {
   const loginData = DataProvider.getInvalidLoginData();
   for (const {username, password, expectedError, description} of loginData){
     test(`login with ${description}, expected ${expectedError}`, async() =>{
-      await loginPage.loginToApplication(username,password as string,baseUrl as string);
+      await test.step(`login with user ${username} and password ${password}`,async()=>{
+        await loginPage.loginToApplication(username,password as string,baseUrl as string);
+      })
       await loginPage.validateErrorMessage(expectedError);
     });
   }
@@ -27,7 +29,9 @@ test.describe("Negative Login Scenarios", () => {
   const loginInputValidationData = DataProvider.loginInputValidation();
   for(const {username,password,expectedError,description} of loginInputValidationData){
     test(`login with ${description}`,async() =>{
-      await loginPage.loginToApplication(username,password as string,baseUrl as string);
+      await test.step(`login with user ${username} and password ${password}`,async()=>{
+        await loginPage.loginToApplication(username,password as string,baseUrl as string);
+      })
       await loginPage.validateErrorMessage(expectedError);
     });
   }
